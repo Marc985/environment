@@ -49,4 +49,5 @@ public class PlantController {
     public Object[] getLeastActivePlantingLocation() {
         return plantService.getLeastActivePlantingLocation();
     }
+
 }
