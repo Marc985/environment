@@ -1,7 +1,9 @@
 package com.codinftitans.backend.controller;
 
 
+import com.codinftitans.backend.dto.MostActUser;
 import com.codinftitans.backend.model.User;
+import com.codinftitans.backend.repository.UserRepository;
 import com.codinftitans.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +18,8 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    UserRepository userRepository;
   /*  @GetMapping("/user")
     public ResponseEntity<List<UserResponseDTO> >findAll(){
         List<UserResponseDTO> users=userService.findAll();
@@ -32,6 +36,10 @@ public class UserController {
     public String deleteUser(@PathVariable UUID id){
         return userService.deleteUser(id);
     }*/
+    @GetMapping("/actif/user")
+    public MostActUser actifUser(){
+        return userService.getMostActifUser();
+    }
 
 
 }
