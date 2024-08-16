@@ -20,11 +20,10 @@ public class S3Config {
     public AmazonS3 s3client() {
 
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
-        var awsS3Config = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-                .withRegion(Regions.EU_NORTH_1.EU_NORTH_1)
-                .build();
 
-        return awsS3Config;
+        return AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                .withRegion(Regions.EU_WEST_3)
+                .build();
     }
 }
