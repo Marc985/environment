@@ -1,0 +1,586 @@
+openapi: '3.0.2'
+info:
+  title: env API
+  version: latest
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /ping:
+    get:
+      tags:
+        - Health
+      summary: Ping pong Health endpoint
+      operationId: pingPong
+      responses:
+        '200':
+          description: pong
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /file:
+    post:
+      tags:
+        - file upload
+      summary: Upload a file
+      operationId: uploadFile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: File uploaded successfully
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+  /register:
+    post:
+      tags:
+        - register
+      summary: Register a new user
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientRegister'
+      responses:
+        '200':
+          description: The registered user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /login:
+    post:
+      tags:
+        - Security
+      summary: Log in to access the dashboard
+      operationId: login
+      requestBody:
+        required: true
+        description: Email & Password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: The JWT token for the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /users:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+      tags:
+        - User
+      summary: Get all users (admins)
+      operationId: getUsers
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetUserDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      tags:
+        - User
+      summary: Crupdate users
+      operationId: crupdateUsers
+      requestBody:
+        required: true
+        description: >
+          List of users to crupdate 
+          Update if ID is provided, create otherwise
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '#/components/schemas/CreateUserDTO'
+
+
+      responses:
+        '200':
+          description: The crupdated users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: The identifier of the user
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - User
+      summary: Get user by identifier
+      operationId: getUserById
+      responses:
+        '200':
+          description: The specified user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - User
+      summary: Delete user by identifier
+      operationId: deleteUserById
+      responses:
+        '200':
+          description: The deleted user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /tree:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+      tags:
+        - Tree
+      summary: Get all trees
+      operationId: getTrees
+      responses:
+        '200':
+          description: List of trees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetTreeDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+
+
+    post:
+      tags:
+        - Tree
+      summary: Create a tree
+      operationId: createTree
+      requestBody:
+        required: true
+        description: The tree to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTreeDTO'
+      responses:
+        '200':
+          description: The created tree
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTreeDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /tree/{username}:
+    get:
+      parameters:
+        - name: username
+          description: >
+            Get tree by username
+          in: path
+          required: true
+          schema:
+            type: string
+      tags:
+        - Tree
+      summary: Get all trees
+      operationId: getTreesByUsername
+      responses:
+        '200':
+          description: List of trees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetTreeDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /employee:
+    put:
+      tags:
+        - Employee
+      summary: Crupdate employee
+      operationId: crupdateEmployee
+      requestBody:
+        required: true
+        description: >
+          List of employee to crupdate 
+          Update if ID is provided, create otherwise
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateEmployee'
+
+
+      responses:
+        '200':
+          description: The crupdated employee
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+      tags:
+        - Employee
+      summary: Get all employees
+      operationId: getEmployees
+      responses:
+        '200':
+          description: List of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetEmployeeDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+
+components:
+  parameters:
+    page:
+      name: page
+      description: >
+        Page number for paginated endpoints 
+        Starts from 0
+      in: query
+      schema:
+        type: number
+      required: false
+
+    size:
+      name: size
+      description: Number of elements per pages for paginated endpoints
+      in: query
+      schema:
+        type: number
+      required: false
+
+  responses:
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestException'
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotAuthorizedException'
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResourceNotFoundException'
+    '429':
+      description: Too many requests to the API
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TooManyRequestsException'
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerException'
+
+  schemas:
+    LoginResponse:
+      properties:
+        token:
+          type: string
+    Credentials:
+      properties:
+        email:
+          type: string
+          example: user@example.com
+        password:
+          type: string
+    User:
+      properties:
+        name:
+          type: string
+          example: john
+        email:
+          type: string
+          example: user@example.com
+
+
+        telephone:
+          type: string
+        role:
+          type: string
+        image:
+          type: string
+          format: binary
+
+    CrupdateUser:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      properties:
+        password:
+          type: string
+        location:
+          allOf:
+            - $ref: '#/components/schemas/Location'
+    CreateUserDTO:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      properties:
+        password:
+          type: string
+        location:
+          allOf:
+            - $ref: '#/components/schemas/Location'
+    CreateEmployee:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      properties:
+        password:
+          type: string
+        region:
+          type: string
+    GetEmployeeDTO:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      properties:
+        id:
+          type: string
+        image:
+          type: string
+        region:
+          type: string
+
+
+
+    GetUserDTO:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      properties:
+
+        id:
+          type: string
+        image:
+          type: string
+    ClientRegister:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      properties:
+        password:
+          type: string
+
+
+
+    Tree:
+      properties:
+
+        name:
+          type: string
+        description:
+          type: string
+
+        location:
+          allOf:
+            - $ref: '#/components/schemas/Location'
+        user:
+          allOf:
+            - $ref: '#/components/schemas/GetUserDTO'
+        image:
+          type: string
+          format: binary
+    Location:
+      properties:
+        latitude:
+          type: string
+        longitude:
+          type: string
+    GetTreeDTO:
+      allOf:
+        - $ref: '#/components/schemas/Tree'
+      properties:
+        id:
+          type: string
+        image:
+          type: string
+    CreateTreeDTO:
+      allOf:
+        - $ref: '#/components/schemas/Tree'
+
+
+    #Exceptions
+
+    Exception:
+      type: object
+      properties:
+        type:
+          type: string
+        message:
+          type: string
+    BadRequestException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: BadRequestException
+        message: Bad request
+    NotAuthorizedException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: NotAuthorizedException
+        message: Not authorized
+    ResourceNotFoundException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: ResourceNotFoundException
+        message: Resource of type <T> identified by <I> not found
+    TooManyRequestsException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: TooManyRequestsException
+        message: Too many requests
+    InternalServerException:
+      allOf:
+        - $ref: '#/components/schemas/Exception'
+      example:
+        type: InternalServerException
+        message: Unexpected error
