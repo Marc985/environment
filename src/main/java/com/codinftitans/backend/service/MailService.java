@@ -2,6 +2,7 @@ package com.codinftitans.backend.service;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,12 @@ public class MailService {
         message.setTo(to);
         message.setSubject("APPOINTMENT");
         message.setText(text);
-        emailSender.send(message);
+        try {
+            emailSender.send(message);
+        } catch (MailException e) {
+            e.printStackTrace();
+            // Gérez l'exception comme nécessaire
+        }
         return "success"
                 ;    }
 
