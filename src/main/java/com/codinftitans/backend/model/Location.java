@@ -17,6 +17,8 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
+    private String longitude;
+    private String latitude;
     @ManyToOne
     @JoinColumn(name = "id_location", referencedColumnName = "id",insertable = false,updatable = false)
     private Location location;
