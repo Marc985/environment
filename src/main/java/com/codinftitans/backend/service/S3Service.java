@@ -22,12 +22,12 @@ public class S3Service {
     }
 
 
-    public void uploadFile(UUID idCar,String keyName, MultipartFile file) throws IOException {
+    public String uploadFile(String keyName, MultipartFile file) throws IOException {
         var putObjectResult = s3client.putObject(bucketName, keyName, file.getInputStream(), null);
         var appUrl=System.getenv("APP_URL");
         var imageUrl=appUrl+"/view/"+keyName;
 
-
+    return imageUrl;
     }
 
     public S3Object getFile(String keyName) {
