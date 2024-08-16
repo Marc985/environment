@@ -32,10 +32,10 @@ RUN gradle build --no-daemon -x test
 FROM eclipse-temurin:22-jdk-jammy
 
 # Copier le JAR construit depuis l'étape de construction
-COPY --from=build /home/gradle/project/build/libs/testgradle-0.0.1-SNAPSHOT.jar testgradle.jar
+COPY --from=build /home/gradle/project/build/libs/environment-0.0.1-SNAPSHOT.jar environment.jar
 
 # Exposer le port
 EXPOSE 8080
 
 # Définir le point d'entrée pour le conteneur
-ENTRYPOINT ["java", "-jar", "testgradle.jar"]
+ENTRYPOINT ["java", "-jar", "environment.jar"]
