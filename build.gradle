@@ -11,10 +11,8 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(22)
 	}
-	java {
 		sourceCompatibility = JavaVersion.VERSION_21
 		targetCompatibility = JavaVersion.VERSION_21
-	}
 }
 
 configurations {
