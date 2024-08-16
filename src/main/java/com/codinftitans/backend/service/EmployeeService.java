@@ -9,7 +9,9 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,8 +25,10 @@ public class EmployeeService {
     UserRepository userRepository;
     @Autowired
     MailService mailService;
+    @Autowired
+    S3Service s3Service;
     @Transactional
-    public CreateEmployeeDTO createEmployee(CreateEmployeeDTO employee){
+    public CreateEmployeeDTO createEmployee(CreateEmployeeDTO employee, MultipartFile image){
         User employeToCreate=modelMapper.map(employee,User.class);
         String generatedPassword= UUID.randomUUID().toString();
         employeToCreate.setPassword("{noop}"+generatedPassword);
@@ -36,6 +40,14 @@ public class EmployeeService {
         } catch (Exception e) {
             e.printStackTrace(); // Log l'erreur pour déboguer
             throw new RuntimeException("Échec de l'envoi de l'email", e); // Propager l'erreur pour traitement ultérieur
+        }
+        if (image != null && !image.isEmpty()) {
+            try {
+                String fileName = s3Service.uploadFile(image.getOriginalFilename().replace(" ", ""), image);
+                employeToCreate.setImage(fileName); // Enregistrez le chemin ou l'URL de l'image
+            } catch (IOException e) {
+                throw new RuntimeException("Échec de l'enregistrement de l'image", e);
+            }
         }
 
         // Sauvegarder l'utilisateur dans la base de données
