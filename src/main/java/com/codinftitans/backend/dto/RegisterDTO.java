@@ -12,6 +12,5 @@ public class RegisterDTO {
     private String email;
     private String image;
     private String password;
-    private String role;
     private String telephone;
 }

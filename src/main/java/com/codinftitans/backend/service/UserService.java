@@ -36,6 +36,8 @@ public class UserService {
     public String register(RegisterDTO register) {
         User userToCreate = modelMapper.map(register, User.class);
         userToCreate.setPassword("{noop}" + register.getPassword());
+        userToCreate.setRole("clients" +
+                "");
         userRepository.save(userToCreate);
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(register.getEmail(), register.getPassword()));
 
