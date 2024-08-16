@@ -12,18 +12,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "\"user\"")
-public class User {
+@Table(name = "tree_type")
+public class TreeType {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    @Column(unique = true)
-    private String email;
-    private String password;
-    private String telephone;
-    private String role;
-    private String image;
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    private String type;
+    private String description;
+    @OneToMany(mappedBy = "treeType",fetch = FetchType.EAGER)
     private Set<Plant> plants;
 }
