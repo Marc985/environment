@@ -1,6 +1,7 @@
 package com.codinftitans.backend.controller;
 
 
+import com.codinftitans.backend.dto.GetClientDTO;
 import com.codinftitans.backend.dto.MostActUser;
 import com.codinftitans.backend.model.User;
 import com.codinftitans.backend.repository.UserRepository;
@@ -39,6 +40,10 @@ public class UserController {
     @GetMapping("/actif/user")
     public MostActUser actifUser(){
         return userService.getMostActifUser();
+    }
+    @GetMapping("/users")
+    public List<GetClientDTO> users(){
+        return userService.getClients();
     }
 
 
