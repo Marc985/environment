@@ -1,8 +1,10 @@
 package com.codinftitans.backend.repository;
 
 import com.codinftitans.backend.model.Plant;
+import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,4 +38,6 @@ public interface PlantRepository  extends JpaRepository<Plant, UUID> {
 
     @Query("SELECT p.location.name, COUNT(p) FROM Plant p JOIN p.location l GROUP BY l.name ORDER BY COUNT(p) ASC LIMIT 1")
     Object[] leastActivePlantingLocation();
+    @Query(value = "select * from plant where id_user=:id_user",nativeQuery = true)
+    List<Tuple> getPlantByUser(@Param("id_user") UUID idUser);
 }
