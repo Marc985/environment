@@ -1,13 +1,11 @@
 package com.codinftitans.backend.controller;
 
 import com.codinftitans.backend.dto.PlantByUserDTO;
+import com.codinftitans.backend.model.Plant;
 import com.codinftitans.backend.service.PlantService;
 import jakarta.persistence.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -56,5 +54,9 @@ public class PlantController {
     @GetMapping("/{idUser}")
     List<PlantByUserDTO> getPlantByUser(@PathVariable UUID idUser){
        return plantService.getPlantsByUser(idUser);
+    }
+    @PostMapping("/new")
+    List<Plant> addPlant(){
+        return null;
     }
 }

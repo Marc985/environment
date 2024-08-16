@@ -1,5 +1,6 @@
 package com.codinftitans.backend.service;
 
+import com.codinftitans.backend.dto.GetClientDTO;
 import com.codinftitans.backend.dto.MostActUser;
 import com.codinftitans.backend.dto.RegisterDTO;
 import com.codinftitans.backend.model.LoginRequest;
@@ -36,7 +37,7 @@ public class UserService {
     public String register(RegisterDTO register) {
         User userToCreate = modelMapper.map(register, User.class);
         userToCreate.setPassword("{noop}" + register.getPassword());
-        userToCreate.setRole("clients");
+        userToCreate.setRole("client");
         userRepository.save(userToCreate);
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(register.getEmail(), register.getPassword()));
 
@@ -56,6 +57,11 @@ public class UserService {
         );
 
         return mostActUser;
+    }
+    public List<GetClientDTO> getClients(){
+        List<User> users=userRepository.findByRole("client");
+        List<GetClientDTO> usersGet=users.stream().map(user->modelMapper.map(user, GetClientDTO.class)).toList();
+        return usersGet;
     }
 
 }

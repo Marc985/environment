@@ -1,6 +1,8 @@
 package com.codinftitans.backend.service;
 
+import com.codinftitans.backend.dto.CreatePlantDTO;
 import com.codinftitans.backend.dto.PlantByUserDTO;
+import com.codinftitans.backend.model.Location;
 import com.codinftitans.backend.model.Plant;
 import com.codinftitans.backend.repository.PlantRepository;
 import jakarta.persistence.Tuple;
@@ -50,6 +52,19 @@ public class PlantService {
        List<Tuple> plants= plantRepository.getPlantByUser(idUser);
        List<PlantByUserDTO> plantsByUser=plants.stream().map(this::mapPlantTuple).toList();
        return plantsByUser;
+    }
+    public List<CreatePlantDTO> savePlants(List<CreatePlantDTO> plants){
+
+       // plantRepository.sa
+        return null;
+    }
+    private Plant mappToPlan(CreatePlantDTO createPlantDTO){
+        Plant plant=new Plant();
+        plant.setId(createPlantDTO.getId());
+        plant.setImage(createPlantDTO.getImage());
+        plant.setDate(createPlantDTO.getDate());
+        plant.setName(createPlantDTO.getName());
+return null;
     }
     private PlantByUserDTO mapPlantTuple(Tuple tuple){
         return  new PlantByUserDTO(
