@@ -1,11 +1,13 @@
 package com.codinftitans.backend.controller;
 
+import com.codinftitans.backend.dto.CreatePlantDTO;
 import com.codinftitans.backend.dto.PlantByUserDTO;
 import com.codinftitans.backend.model.Plant;
 import com.codinftitans.backend.service.PlantService;
 import jakarta.persistence.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -55,8 +57,10 @@ public class PlantController {
     List<PlantByUserDTO> getPlantByUser(@PathVariable UUID idUser){
        return plantService.getPlantsByUser(idUser);
     }
-    @PostMapping("/new")
-    List<Plant> addPlant(){
-        return null;
+    @PostMapping("/save")
+    public List<Plant> savePlants(
+            @RequestPart("plants") List<CreatePlantDTO> plants,
+            @RequestPart("images") List<MultipartFile> images) {
+        return plantService.savePlants(plants, images);
     }
 }
