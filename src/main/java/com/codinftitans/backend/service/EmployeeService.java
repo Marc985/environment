@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -45,5 +46,10 @@ public class EmployeeService {
         List<User> users=userRepository.findByRole("employee");
         List<GetEmployeeDTO>employees=users.stream().map(user -> modelMapper.map(user,GetEmployeeDTO.class)).toList();
         return employees;
+    }
+    public GetEmployeeDTO getEmployeeById(UUID id){
+        Optional<User> user=userRepository.findById(id);
+        GetEmployeeDTO getEmployee=modelMapper.map(user,GetEmployeeDTO.class);
+        return getEmployee;
     }
 }
