@@ -1,5 +1,8 @@
 package com.codinftitans.backend.service;
 
+import com.codinftitans.backend.model.User;
+import com.codinftitans.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -19,8 +22,11 @@ public class TokenService {
     public TokenService(JwtEncoder encoder) {
         this.encoder = encoder;
     }
+    @Autowired
+    UserRepository userRepository;
 
     public String generateToken(Authentication authentication) {
+        User user=userRepository.findByEmail(authentication.getName());
         Instant now = Instant.now();
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -29,7 +35,7 @@ public class TokenService {
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.HOURS))
-                .subject(authentication.getName())
+                .subject(user.getId().toString())
                 .claim("scope", scope)
                 .build();
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
