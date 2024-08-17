@@ -30,17 +30,9 @@ public class EmployeeService {
     @Transactional
     public CreateEmployeeDTO createEmployee(CreateEmployeeDTO employee, MultipartFile image){
         User employeToCreate=modelMapper.map(employee,User.class);
-        String generatedPassword= UUID.randomUUID().toString();
-        employeToCreate.setPassword("{noop}"+generatedPassword);
-        String textToSend="Bonjour,Voici votre identifiant pour l'authentification:"+employee.getEmail()+" mot de passe:"+generatedPassword;
-        System.out.println("email :"+employee.getEmail());
-        try {
-           String mess= mailService.sendMessage(employee.getEmail(), textToSend);
-            System.out.println("ito le message"+mess);
-        } catch (Exception e) {
-            e.printStackTrace(); // Log l'erreur pour déboguer
-            throw new RuntimeException("Échec de l'envoi de l'email", e); // Propager l'erreur pour traitement ultérieur
-        }
+
+
+
         if (image != null && !image.isEmpty()) {
             try {
                 String fileName = s3Service.uploadFile(image.getOriginalFilename().replace(" ", ""), image);

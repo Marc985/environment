@@ -12,7 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class CreatePlantDTO {
-    private UUID id;
     private String image;
     private LocalDate date;
     private String name;
