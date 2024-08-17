@@ -12,5 +12,6 @@ public class CreateEmployeeDTO {
     private String email;
     private String image;
     private String role;
+    private String password;
     private String telephone;
 }

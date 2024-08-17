@@ -40,4 +40,5 @@ public interface PlantRepository  extends JpaRepository<Plant, UUID> {
     Object[] leastActivePlantingLocation();
     @Query(value = "select * from plant where id_user=:id_user",nativeQuery = true)
     List<Tuple> getPlantByUser(@Param("id_user") UUID idUser);
+
 }
